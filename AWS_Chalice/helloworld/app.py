@@ -92,4 +92,9 @@ def periodic_task(event):
 
     return {"function_launched": launch_time}
 
+
+@app.route("/apikey-needed", methods=["GET"], api_key_required=True)
+def apikey_needed():
+    return {"Key": True}
+
 # End

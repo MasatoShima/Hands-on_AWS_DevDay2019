@@ -1,9 +1,10 @@
 from chalice import Chalice
 import boto3
+from botocore.client import Config
 
 BUCKET_NAME = "chalice-handson-masato-shima-20191003"
 
-S3 = boto3.client("s3")
+S3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
 
 app = Chalice(app_name="chalice-hands-on-s3upload")
 
@@ -39,7 +40,12 @@ def presigned_url():
 
     url = S3.generate_presigned_url(
         ClientMethod="put_object",
-        Params={"Bucket": BUCKET_NAME, "Key": key},
+
+        Params={
+            "Bucket": BUCKET_NAME,
+            "Key": key,
+            "ContentType": "application/octet-stream"
+        },
         ExpiresIn=expires_in,
         HttpMethod="PUT"
     )
